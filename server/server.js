@@ -12,10 +12,6 @@ var {User} = require('./models/user');
 var app = express();
 const port = process.env.PORT;
 
-salut
-
-
-
 app.use(bodyParser.json());
 
 app.post('/todos',(req, res)=>{
