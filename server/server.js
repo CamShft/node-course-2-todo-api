@@ -35,7 +35,6 @@ app.get('/todos',(req, res)=>{
   });
 });
 
-//GET /todos/1234324
 app.get('/todos/:id', (req, res)=>{
   var id = req.params.id;
 
@@ -94,6 +93,20 @@ app.patch('/todos/:id',(req, res)=>{
   }).catch((e)=>{
     res.status(400).send();
   });
+});
+
+app.post('/users',(req, res)=>{
+  var body = _.pick(req.body,['email','password']);
+  var user = new User(body);
+
+  user.save().then(() =>{
+    return user.generateAutToken();
+  }).then((token)=>{
+    res.header('x-auth',token).send(user);
+  }).catch((e)=>{
+    res.status(400).send(e);
+  })
+
 });
 
 app.listen(port,()=>{
