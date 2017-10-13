@@ -53,7 +53,6 @@ describe('POST /todos',()=>{
     });
 });
 
-
 describe('GET /todos',()=>{
   it('Should get all todos',(done)=>{
     request(app)
@@ -112,8 +111,8 @@ describe('DELETE /todos/:id',()=>{
       expect(todo).toNotExist();
       done();
     }).catch((e)=>done(e));
-});
   });
+});
 
   it('should return 404 if todo not found', (done)=>{
     var hexId = new ObjectID().toHexString();
@@ -279,37 +278,25 @@ describe('POST /users/login',()=>{
 
   });
   it('should reject invalid login',(done)=>{
-    // request(app)
-    //   .post('/users/login')
-    //   .send({
-    //     email : users[1].email,
-    //     password: users[1].password + '12'
-    //   })
-    //   .expect(400)
-    //   .end(done);
+    request(app)
+      .post('/users/login')
+      .send({
+        email:users[1].email,
+        password:users[1].password + '123'
+      })
+      .expect(400)
+      .expect((res)=>{
+        expect(res.headers['x-auth']).toNotExist();
+      })
+      .end((err, res)=>{
+        if(err){
+          return done(err);
+        }
 
-//////////////
-
-
-request(app)
-  .post('/users/login')
-  .send({
-    email:users[1].email,
-    password:users[1].password + '123'
-  })
-  .expect(400)
-  .expect((res)=>{
-    expect(res.headers['x-auth']).toNotExist();
-  })
-  .end((err, res)=>{
-    if(err){
-      return done(err);
-    }
-
-    User.findById(users[1]._id).then((user)=>{
-      expect(user.tokens.length).toBe(0);
-      done();
-    }).catch((e)=>done(e));
-  })
+        User.findById(users[1]._id).then((user)=>{
+          expect(user.tokens.length).toBe(0);
+          done();
+        }).catch((e)=>done(e));
+      })
   });
 })
