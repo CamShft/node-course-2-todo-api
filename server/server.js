@@ -115,7 +115,6 @@ app.get('/users/me', authenticate, (req, res)=>{
   res.send(req.user);
 });
 
-//POST /users/login {email, password}
 app.post('/users/login',(req,res)=>{
   var body = _.pick(req.body,['email','password']);
 
@@ -126,15 +125,8 @@ app.post('/users/login',(req,res)=>{
   }).catch((e)=>{
     res.status(400).send();
   });
-
-  // User.findOne({email:body.email}).then((user)=>{
-  //   if (bcrypt.compare(body.password,user.password)){
-  //     res.send(user);
-  //   }
-  // }).catch((err)=>{
-  //    res.status(404).send();
-  // });
 });
+
 app.listen(port,()=>{
   console.log(`Started up at port ${port}`);
 });
